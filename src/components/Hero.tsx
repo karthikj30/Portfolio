@@ -1,11 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { ArrowDown, Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "./icons";
 import ParticleField from "./ParticleField";
+import KenBurnsBackdrop from "./KenBurnsBackdrop";
 import { profile } from "@/data/portfolio";
 
 export default function Hero() {
@@ -18,14 +24,22 @@ export default function Hero() {
     return () => clearInterval(id);
   }, []);
 
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Cursor-driven 3D tilt + parallax (Moncy-style).
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 80, damping: 18 });
-  const springY = useSpring(mouseY, { stiffness: 80, damping: 18 });
-  const rotateX = useTransform(springY, [-0.5, 0.5], [8, -8]);
-  const rotateY = useTransform(springX, [-0.5, 0.5], [-8, 8]);
-  const imageX = useTransform(springX, [-0.5, 0.5], [-14, 14]);
-  const imageY = useTransform(springY, [-0.5, 0.5], [-14, 14]);
+  const springX = useSpring(mouseX, { stiffness: 90, damping: 16 });
+  const springY = useSpring(mouseY, { stiffness: 90, damping: 16 });
+  const rotateX = useTransform(springY, [-0.5, 0.5], [12, -12]);
+  const rotateY = useTransform(springX, [-0.5, 0.5], [-12, 12]);
+  const imageX = useTransform(springX, [-0.5, 0.5], [-24, 24]);
+  const imageY = useTransform(springY, [-0.5, 0.5], [-24, 24]);
+
+  // Scroll-driven lift + drift so the portrait moves as you scroll.
+  const { scrollY } = useScroll();
+  const scrollLift = useTransform(scrollY, [0, 700], [0, -90]);
+  const scrollLiftSpring = useSpring(scrollLift, { stiffness: 120, damping: 30 });
 
   function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -40,15 +54,16 @@ export default function Hero() {
 
   return (
     <section
+      ref={sectionRef}
       id="top"
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       className="relative flex min-h-screen items-center overflow-hidden pt-24"
     >
       <div className="pointer-events-none absolute inset-0">
+        <KenBurnsBackdrop />
         <ParticleField />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(139,92,246,0.18),transparent)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/30 to-background" />
       </div>
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr]">
@@ -150,25 +165,32 @@ export default function Hero() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           style={{ perspective: 1000 }}
-          className="relative mx-auto hidden aspect-[4/5] w-full max-w-sm lg:block"
+          className="relative mx-auto hidden aspect-video w-full max-w-lg lg:block"
         >
           <motion.div
-            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+            style={{
+              rotateX,
+              rotateY,
+              y: scrollLiftSpring,
+              transformStyle: "preserve-3d",
+            }}
             className="relative h-full w-full"
           >
-            <div className="absolute -inset-6 rounded-[2rem] bg-gradient-to-br from-accent/25 to-accent-2/15 blur-3xl" />
+            <div className="absolute -inset-6 rounded-[1.75rem] bg-gradient-to-br from-accent/25 to-accent-2/15 blur-3xl" />
             <motion.div
               style={{ x: imageX, y: imageY }}
-              className="relative h-full w-full overflow-hidden rounded-[2rem] border border-card-border"
+              className="relative h-full w-full overflow-hidden rounded-[1.75rem] border border-card-border shadow-2xl shadow-black/40"
             >
-              <Image
-                src="/images/portrait-2.jpg"
-                alt={profile.name}
-                fill
-                priority
-                className="object-cover"
+              <video
+                src="/videos/intro.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster="/images/portrait-2.jpg"
+                className="h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
             </motion.div>
           </motion.div>
         </motion.div>

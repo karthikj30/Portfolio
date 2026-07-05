@@ -1,21 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
-
-const LINES = [
-  "Hi, I'm Karthik Janardhan.",
-  "A passionate full-stack developer & GenAI builder.",
-  "From LLM observability stacks to hackathon-winning platforms —",
-  "Welcome to my portfolio.",
-];
-
-const STEP_MS = 1900;
+import { Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { profile } from "@/data/portfolio";
 
 export default function IntroSequence() {
   const [visible, setVisible] = useState(false);
-  const [step, setStep] = useState(0);
+  const [muted, setMuted] = useState(true);
+  const [playing, setPlaying] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -26,15 +21,38 @@ export default function IntroSequence() {
     sessionStorage.setItem("intro-seen", "1");
   }, []);
 
+  // Lock body scroll while the intro is playing.
   useEffect(() => {
     if (!visible) return;
-    if (step >= LINES.length - 1) {
-      const finish = setTimeout(() => setVisible(false), STEP_MS + 600);
-      return () => clearTimeout(finish);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [visible]);
+
+  function dismiss() {
+    setVisible(false);
+  }
+
+  function toggleMute() {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = !v.muted;
+    setMuted(v.muted);
+  }
+
+  function togglePlay() {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.play();
+      setPlaying(true);
+    } else {
+      v.pause();
+      setPlaying(false);
     }
-    const id = setTimeout(() => setStep((s) => s + 1), STEP_MS);
-    return () => clearTimeout(id);
-  }, [visible, step]);
+  }
 
   return (
     <AnimatePresence>
@@ -42,56 +60,95 @@ export default function IntroSequence() {
         <motion.div
           exit={{ opacity: 0 }}
           transition={{ duration: 0.7, ease: "easeInOut" }}
-          className="fixed inset-0 z-[100] overflow-hidden bg-background"
+          className="fixed inset-0 z-[100] bg-background"
         >
-          <motion.div
-            initial={{ scale: 1 }}
-            animate={{ scale: 1.15 }}
-            transition={{ duration: LINES.length * (STEP_MS / 1000) + 1, ease: "easeOut" }}
-            className="absolute inset-0"
-          >
-            <Image
-              src="/images/portrait-1.jpg"
-              alt=""
-              fill
-              priority
-              className="object-cover object-top opacity-60"
-            />
-          </motion.div>
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/40" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_100%,rgba(139,92,246,0.25),transparent)]" />
+          <video
+            ref={videoRef}
+            src="/videos/intro.mp4"
+            autoPlay
+            muted
+            playsInline
+            onTimeUpdate={(e) => {
+              const v = e.currentTarget;
+              if (v.duration) setProgress(v.currentTime / v.duration);
+            }}
+            onEnded={dismiss}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
 
-          <div className="relative flex h-full items-center justify-center px-6">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={step}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -24 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-3xl text-center font-display text-3xl font-bold leading-tight sm:text-5xl"
-              >
-                {LINES[step]}
-              </motion.p>
-            </AnimatePresence>
+          {/* cinematic gradient for text legibility */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-background/50" />
+
+          {/* name / title overlay */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-10 p-8 sm:bottom-14 sm:p-14">
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-accent-2"
+            >
+              Portfolio 2026
+            </motion.p>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55, duration: 0.7 }}
+              className="font-display text-4xl font-extrabold leading-[0.95] sm:text-7xl"
+            >
+              {profile.name}
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.7 }}
+              className="mt-4 text-xs uppercase tracking-[0.25em] text-muted sm:text-sm"
+            >
+              Full-Stack Developer · GenAI Builder · Hackathon Winner
+            </motion.p>
           </div>
 
-          <button
-            onClick={() => setVisible(false)}
-            className="absolute right-6 top-6 rounded-full border border-card-border bg-card/60 px-4 py-2 text-xs text-muted backdrop-blur-md transition-colors hover:text-foreground"
-          >
-            Skip →
-          </button>
+          {/* controls */}
+          <div className="absolute right-6 top-6 flex items-center gap-2">
+            <button
+              onClick={toggleMute}
+              aria-label={muted ? "Unmute" : "Mute"}
+              className="rounded-full border border-card-border bg-card/60 p-2.5 text-foreground backdrop-blur-md transition-colors hover:text-accent-2"
+            >
+              {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            </button>
+            <button
+              onClick={togglePlay}
+              aria-label={playing ? "Pause" : "Play"}
+              className="rounded-full border border-card-border bg-card/60 p-2.5 text-foreground backdrop-blur-md transition-colors hover:text-accent-2"
+            >
+              {playing ? <Pause size={18} /> : <Play size={18} />}
+            </button>
+            <button
+              onClick={dismiss}
+              className="rounded-full border border-card-border bg-card/60 px-4 py-2 text-xs text-muted backdrop-blur-md transition-colors hover:text-foreground"
+            >
+              Skip →
+            </button>
+          </div>
 
-          <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-2">
-            {LINES.map((_, i) => (
-              <span
-                key={i}
-                className={`h-1 w-8 rounded-full transition-colors duration-500 ${
-                  i <= step ? "bg-accent-2" : "bg-card-border"
-                }`}
-              />
-            ))}
+          {/* unmute hint while muted */}
+          {muted && (
+            <motion.button
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              onClick={toggleMute}
+              className="absolute left-1/2 top-6 -translate-x-1/2 rounded-full border border-accent-2/40 bg-card/70 px-4 py-2 text-xs font-medium text-accent-2 backdrop-blur-md"
+            >
+              🔊 Tap to unmute
+            </motion.button>
+          )}
+
+          {/* progress bar */}
+          <div className="absolute inset-x-0 bottom-0 h-1 bg-card-border/60">
+            <div
+              className="h-full bg-accent-2"
+              style={{ width: `${progress * 100}%` }}
+            />
           </div>
         </motion.div>
       )}
