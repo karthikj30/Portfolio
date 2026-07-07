@@ -1,5 +1,6 @@
 import IntroSequence from "@/components/IntroSequence";
 import ResumeModal from "@/components/ResumeModal";
+import ProjectModal from "@/components/ProjectModal";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -28,6 +29,7 @@ export default function Home() {
       </main>
       <Footer />
       <ResumeModal />
+      <ProjectModal />
     </>
   );
 }

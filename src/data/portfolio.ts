@@ -15,9 +15,12 @@ export const profile = {
   cgpi: "8.40 (T.E.)",
   education: "B.E. Information Technology, St. Francis Institute of Technology (2023–present)",
   resumeUrl: "/resume.pdf",
+  githubUser: "karthikj30",
+  leetcodeUser: "karthikjanardhan5",
   socials: {
     github: "https://github.com/karthikj30",
     linkedin: "https://www.linkedin.com/in/karthik-janardhan-73a8b12a8/",
+    leetcode: "https://leetcode.com/u/karthikjanardhan5/",
   },
 };
 
@@ -169,6 +172,12 @@ export type Project = {
   href?: string;
   /** Optional cover image, e.g. "/images/projects/vendorconnect.png" (place file in public/images/projects/). */
   image?: string;
+  /** Extra images shown in the project dialog gallery (optional). */
+  images?: string[];
+  /** Longer description (shown in the dialog) — summarised from the repo README. */
+  about?: string;
+  /** Live deployment link (Vercel/Render/etc). Leave blank to hide the button. */
+  demo?: string;
 };
 
 export const projects: Project[] = [
@@ -178,6 +187,8 @@ export const projects: Project[] = [
     stack: "Prometheus · Grafana · DCGM Exporter · LiteLLM · Langfuse",
     description:
       "An observability stack for LLM-serving infrastructure — monitors latency, token usage, GPU utilization, and model failures to improve troubleshooting and capacity planning.",
+    about:
+      "An observability stack for local LLM inference — Prometheus + Grafana dashboards, LiteLLM for API-key usage logging, PostgreSQL request logs, and a custom Python exporter. It tracks token consumption, request latency, GPU utilization, and model failures, enabling faster failure investigation, load correlation, and capacity planning across model-serving workloads.",
     image: "/images/projects/nse-observability.png",
     href: "https://github.com/karthikj30/NSE_Observability",
   },
@@ -187,8 +198,11 @@ export const projects: Project[] = [
     stack: "Python · OpenAI · Android",
     description:
       "A digital platform solving raw-material sourcing for street food vendors across India — connects vendors with verified suppliers, group ordering for bulk discounts, and real-time price alerts.",
+    about:
+      "A comprehensive digital platform designed to solve the raw-material sourcing problems faced by street-food vendors across India. It connects vendors with verified suppliers, offers group ordering for bulk discounts, and provides real-time price alerts — reducing costs and improving reliability for small food businesses.",
     image: "/images/projects/vendorconnect.png",
-    href: "https://github.com/karthikj30/VendorConnect"
+    href: "https://github.com/karthikj30/VendorConnect",
+    demo: "https://vendorconnect-gkhy.onrender.com",
   },
   {
     name: "Skillora",
@@ -196,6 +210,8 @@ export const projects: Project[] = [
     stack: "Python · Django · MongoDB",
     description:
       "A centralized learning platform connecting skill development with job opportunities through courses, job matching, and instructor-led learning.",
+    about:
+      "A Django-powered learning platform that connects skill development with real job opportunities. Skillora brings together courses, job matching, and instructor-led learning in one place, helping learners build in-demand skills and translate them into career growth.",
     image: "/images/projects/skillora.png",
     href: "https://github.com/karthikj30/Skillora",
   },
@@ -205,6 +221,8 @@ export const projects: Project[] = [
     stack: "Python · FastAPI · TypeScript · YOLO · RAG",
     description:
       "An AI-integrated EV ecosystem bridging vehicle hardware (ESP32/BMS) with predictive intelligence — battery SOC/SOH/RUL forecasting, computer-vision driver-drowsiness detection, and a RAG advisory bot.",
+    about:
+      "A state-of-the-art, AI-integrated platform engineered to streamline Electric Vehicle adoption and management in the Indian market. EV-Bharat bridges low-level vehicle hardware (ESP32/BMS sensors) with high-level predictive intelligence: a Battery Intelligence Engine (SOC/SOH/RUL predictions), a computer-vision Driver Safety Engine (MediaPipe drowsiness detection), a YOLO detection service, and a RAG advisory bot — all coordinated through a central WebSocket hub.",
     image: "/images/projects/evbharat.png",
     href: "https://github.com/karthikj30/EV-Bharat",
   },
@@ -214,6 +232,8 @@ export const projects: Project[] = [
     stack: "Python · Flask · HTML · CSS · SQLite",
     description:
       "A heritage-tourism platform connecting travelers with India's monuments and historical sites — guided tours, interactive maps, rewards, and curated merchandise. Won first prize at Colloquium'25.",
+    about:
+      "A comprehensive Indian heritage-tourism platform that connects travelers with India's rich cultural heritage, monuments, and historical sites. Itihaas offers guided tours, curated merchandise, interactive maps, and a unique reward system to enhance the tourism experience. It won first prize at the Colloquium'25 inter-college IT hackathon under the theme \"IT for Good Governance\".",
     image: "/images/projects/itihaas.png",
     href: "https://github.com/karthikj30/Itihaas",
   },
