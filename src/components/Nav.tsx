@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { FileText, Menu, X } from "lucide-react";
 import { profile } from "@/data/portfolio";
+import { openResume } from "./ResumeModal";
 
 const links = [
   { href: "#about", label: "About" },
@@ -50,12 +51,21 @@ export default function Nav() {
           ))}
         </ul>
 
-        <a
-          href="#contact"
-          className="hidden md:inline-flex rounded-full border border-card-border bg-card px-4 py-2 text-sm transition-colors hover:border-accent-2/50 hover:text-accent-2"
-        >
-          Let's talk
-        </a>
+        <div className="hidden items-center gap-3 md:flex">
+          <button
+            onClick={openResume}
+            className="inline-flex items-center gap-1.5 rounded-full border border-card-border bg-card px-4 py-2 text-sm transition-colors hover:border-accent-2/50 hover:text-accent-2"
+          >
+            <FileText size={15} />
+            Résumé
+          </button>
+          <a
+            href="#contact"
+            className="inline-flex rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition-transform hover:scale-105"
+          >
+            Let&apos;s talk
+          </a>
+        </div>
 
         <button
           className="md:hidden text-foreground"
@@ -80,6 +90,18 @@ export default function Nav() {
                 </a>
               </li>
             ))}
+            <li>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  openResume();
+                }}
+                className="flex items-center gap-2 py-1 text-accent-2"
+              >
+                <FileText size={15} />
+                View Résumé
+              </button>
+            </li>
           </ul>
         </div>
       )}

@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ArrowUpRight, Lock } from "lucide-react";
+import { ArrowUpRight, Lock, RotateCw } from "lucide-react";
 import Reveal from "./Reveal";
 import { projects } from "@/data/portfolio";
+import { getSkillMeta } from "./skillIcons";
 
 const SPEED = 45; // px per second
 
@@ -37,8 +38,6 @@ export default function ProjectsGallery() {
     let last = performance.now();
     const tick = (now: number) => {
       const s = state.current;
-      // Clamp dt so returning to the tab after it was backgrounded
-      // (rAF paused) doesn't cause a big jump on the first frame.
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
 
@@ -112,7 +111,7 @@ export default function ProjectsGallery() {
             Things I&apos;ve built
           </h2>
           <p className="mt-3 text-sm text-muted">
-            Auto-scrolling — hover to pause, or drag to explore.
+            Auto-scrolling — hover a card to flip it and reveal the stack.
           </p>
         </Reveal>
       </div>
@@ -135,41 +134,79 @@ export default function ProjectsGallery() {
           const stack = project.stack.split(" · ");
           const inner = (
             <div
-              data-card
-              className="group relative flex h-[420px] w-[280px] shrink-0 flex-col justify-end overflow-hidden rounded-3xl border border-card-border bg-card p-6 transition-colors duration-300 hover:border-accent-2/40 sm:w-[320px]"
+              className="group h-[420px] w-[280px] shrink-0 [perspective:1400px] sm:w-[320px]"
+              draggable={false}
             >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(139,92,246,0.25),transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <div className="absolute right-5 top-5">
-                {project.href ? (
-                  <ArrowUpRight
-                    size={18}
-                    className="text-muted transition-colors group-hover:text-accent-2"
-                  />
-                ) : (
-                  <Lock
-                    size={16}
-                    className="text-muted"
-                    aria-label="Not publicly available"
-                  />
-                )}
-              </div>
+              <div className="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                {/* Front */}
+                <div className="absolute inset-0 flex flex-col justify-end overflow-hidden rounded-3xl border border-card-border bg-card p-6 [backface-visibility:hidden]">
+                  {project.image && (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={project.image}
+                        alt={project.name}
+                        draggable={false}
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/20" />
+                    </>
+                  )}
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(139,92,246,0.18),transparent_60%)]" />
+                  <div className="absolute right-5 top-5">
+                    {project.href ? (
+                      <ArrowUpRight size={18} className="text-muted" />
+                    ) : (
+                      <Lock size={16} className="text-muted" aria-label="Private" />
+                    )}
+                  </div>
+                  <p className="relative text-xs text-muted">{project.date}</p>
+                  <h3 className="relative mt-1 font-display text-2xl font-bold">
+                    {project.name}
+                  </h3>
+                  <p className="relative mt-3 text-sm text-muted leading-relaxed">
+                    {project.description}
+                  </p>
+                  <p className="relative mt-4 inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-accent-2/80">
+                    <RotateCw size={12} /> Hover for stack
+                  </p>
+                </div>
 
-              <p className="relative text-xs text-muted">{project.date}</p>
-              <h3 className="relative mt-1 font-display text-2xl font-bold">
-                {project.name}
-              </h3>
-              <p className="relative mt-3 text-sm text-muted leading-relaxed">
-                {project.description}
-              </p>
-              <div className="relative mt-4 flex flex-wrap gap-2">
-                {stack.map((t) => (
-                  <span
-                    key={t}
-                    className="rounded-full border border-card-border bg-background/50 px-2.5 py-1 text-[11px] text-muted"
-                  >
-                    {t}
-                  </span>
-                ))}
+                {/* Back */}
+                <div className="absolute inset-0 flex flex-col overflow-hidden rounded-3xl border border-accent-2/30 bg-card p-6 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(34,211,238,0.15),transparent_60%)]" />
+                  <p className="relative text-xs uppercase tracking-widest text-accent-2">
+                    Tech &amp; Skills
+                  </p>
+                  <h3 className="relative mt-1 font-display text-xl font-bold">
+                    {project.name}
+                  </h3>
+                  <div className="relative mt-5 flex flex-col gap-2.5">
+                    {stack.map((t, ti) => {
+                      const { Icon, color } = getSkillMeta(t);
+                      return (
+                        <div
+                          key={t}
+                          className="flex translate-y-2 items-center gap-3 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100"
+                          style={{ transitionDelay: `${250 + ti * 90}ms` }}
+                        >
+                          <span
+                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-background/60"
+                            style={{ color }}
+                          >
+                            <Icon size={17} />
+                          </span>
+                          <span className="text-sm text-foreground">{t}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {project.href && (
+                    <span className="relative mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-accent-2">
+                      View project <ArrowUpRight size={15} />
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           );
@@ -186,9 +223,7 @@ export default function ProjectsGallery() {
               {inner}
             </a>
           ) : (
-            <div key={`${project.name}-${i}`} draggable={false}>
-              {inner}
-            </div>
+            <div key={`${project.name}-${i}`}>{inner}</div>
           );
         })}
       </div>

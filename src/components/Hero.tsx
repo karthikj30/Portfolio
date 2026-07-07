@@ -8,9 +8,10 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { ArrowDown, Mail } from "lucide-react";
+import { ArrowDown, FileText, Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "./icons";
 import GalaxyBackground from "./GalaxyBackground";
+import { openResume } from "./ResumeModal";
 import { profile } from "@/data/portfolio";
 
 export default function Hero() {
@@ -122,11 +123,18 @@ export default function Hero() {
             >
               View Projects
             </a>
+            <button
+              onClick={openResume}
+              className="inline-flex items-center gap-2 rounded-full border border-card-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-accent-2/50 hover:text-accent-2"
+            >
+              <FileText size={16} />
+              View Résumé
+            </button>
             <a
               href="#contact"
-              className="rounded-full border border-card-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-accent-2/50 hover:text-accent-2"
+              className="text-sm font-semibold text-muted transition-colors hover:text-foreground"
             >
-              Get in touch
+              Get in touch →
             </a>
 
             <div className="ml-2 flex items-center gap-4 text-muted">

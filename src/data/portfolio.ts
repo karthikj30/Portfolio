@@ -14,6 +14,7 @@ export const profile = {
   email: "karthikjanardhan5@gmail.com",
   cgpi: "8.40 (T.E.)",
   education: "B.E. Information Technology, St. Francis Institute of Technology (2023–present)",
+  resumeUrl: "/resume.pdf",
   socials: {
     github: "https://github.com/karthikj30",
     linkedin: "https://www.linkedin.com/in/karthik-janardhan-73a8b12a8/",
@@ -72,7 +73,17 @@ export type Experience = {
   date: string;
   bullets: string[];
   tag?: string;
+  skills: string[];
 };
+
+/** Skill-domain proficiency for the animated growth chart in Experience. */
+export const skillBars: { label: string; level: number }[] = [
+  { label: "Full-Stack Development", level: 85 },
+  { label: "Generative AI / LLMs", level: 82 },
+  { label: "Observability & DevOps", level: 72 },
+  { label: "Data & Databases", level: 76 },
+  { label: "Leadership & Communication", level: 90 },
+];
 
 export const experience: Experience[] = [
   {
@@ -85,6 +96,7 @@ export const experience: Experience[] = [
       "Used Prometheus for metric scraping and alerts, Grafana for dashboards, DCGM Exporter for NVIDIA GPU telemetry, and LiteLLM + Langfuse for tracing and token-level visibility.",
       "Enabled faster failure investigation, load correlation, and capacity planning across model-serving workloads.",
     ],
+    skills: ["Prometheus", "Grafana", "Langfuse", "LiteLLM", "GPU Telemetry", "Observability"],
   },
   {
     role: "Marketing — Joint Head",
@@ -94,6 +106,7 @@ export const experience: Experience[] = [
       "Lead marketing and outreach — securing sponsors and partnerships for technical events and student activities.",
       "Played a key role in organizing HackX 2.0, a national-level hackathon run with the CSI team: event promotion, partner coordination, and community engagement.",
     ],
+    skills: ["Leadership", "Marketing", "Partnerships", "Event Ops", "Community"],
   },
   {
     role: "Runner-Up",
@@ -103,6 +116,7 @@ export const experience: Experience[] = [
       "Achieved Runner-Up position, selected for the finale round among 1,700+ competing teams.",
       "Recognized for innovative problem-solving, technical implementation, and team collaboration under competitive constraints.",
     ],
+    skills: ["Problem-Solving", "Rapid Prototyping", "OpenAI", "Teamwork"],
   },
   {
     role: "Intern",
@@ -112,6 +126,7 @@ export const experience: Experience[] = [
       "Completed a virtual internship on Google Cloud Generative AI in collaboration with AICTE.",
       "Hands-on experience with GenAI concepts, real-world use cases, and practical implementation on Google Cloud.",
     ],
+    skills: ["Generative AI", "Google Cloud", "Vertex AI"],
   },
   {
     role: "Intern",
@@ -122,6 +137,7 @@ export const experience: Experience[] = [
       "Worked with GitHub, web scraping, and chatbot development.",
       "Designed and delivered a live Power BI project (IPL Dashboard) for data visualization and insight generation.",
     ],
+    skills: ["Python", "Django", "Web Scraping", "Power BI", "Chatbots"],
   },
   {
     role: "Leading the Team",
@@ -131,6 +147,7 @@ export const experience: Experience[] = [
       "Completed Google Cloud GenAI Academy — hands-on with Vertex AI, Gemini APIs, Imagen, Streamlit, and Multimodal RAG.",
       "Recognized as a Top 50 Learner (June) among 250,000+ participants; ranked in the Top 1% performers with 800 points.",
     ],
+    skills: ["Vertex AI", "Gemini API", "Imagen", "Streamlit", "Multimodal RAG"],
   },
   {
     role: "Winner & Leader",
@@ -140,6 +157,7 @@ export const experience: Experience[] = [
       "Won first prize under the theme \"IT for Good Governance\" for Itihaas, a heritage-tourism platform.",
       "Co-developed guided tours, interactive maps, rewards, and curated merchandise for user engagement.",
     ],
+    skills: ["Flask", "Full-Stack", "UI/UX", "Teamwork"],
   },
 ];
 
@@ -149,6 +167,8 @@ export type Project = {
   stack: string;
   description: string;
   href?: string;
+  /** Optional cover image, e.g. "/images/projects/vendorconnect.png" (place file in public/images/projects/). */
+  image?: string;
 };
 
 export const projects: Project[] = [
@@ -241,18 +261,24 @@ export const githubProjects: GithubProject[] = [
   },
 ];
 
-export const certificates: string[] = [
-  "Internship Completion Certificate — GET AnalyticX",
-  "Gen AI Program — Gen AI Academy (Forge)",
-  "Virtual Internship — Generative AI — SmartBridge",
-  "Introduction to Technology Apprenticeship — Accenture (Forage)",
-  "Cybersecurity Analyst — Job Simulation — Accenture (Forage)",
-  "ISRO Course — Government of India",
-  "Introduction to Generative AI — IBM SkillsBuild",
-  "Certificate of Appreciation — NXT WAVE / OpenAI Academy",
-  "Certificate of Acknowledgement — Bharatiya Antariksh Hackathon",
-  "Google Developer Groups on Campus",
-  "NoSQL & MongoDB Bootcamp — DevTown",
-  "Microsoft Student Chapter (MSIT)",
-  "Google Cloud Generative AI / AI Completion Certificate",
+export type Certificate = {
+  title: string;
+  /** Optional image, e.g. "/images/certificates/genai.png" (place file in public/images/certificates/). */
+  image?: string;
+};
+
+export const certificates: Certificate[] = [
+  { title: "Internship Completion Certificate — GET AnalyticX" },
+  { title: "Gen AI Program — Gen AI Academy (Forge)" },
+  { title: "Virtual Internship — Generative AI — SmartBridge" },
+  { title: "Introduction to Technology Apprenticeship — Accenture (Forage)" },
+  { title: "Cybersecurity Analyst — Job Simulation — Accenture (Forage)" },
+  { title: "ISRO Course — Government of India" },
+  { title: "Introduction to Generative AI — IBM SkillsBuild" },
+  { title: "Certificate of Appreciation — NXT WAVE / OpenAI Academy" },
+  { title: "Certificate of Acknowledgement — Bharatiya Antariksh Hackathon" },
+  { title: "Google Developer Groups on Campus" },
+  { title: "NoSQL & MongoDB Bootcamp — DevTown" },
+  { title: "Microsoft Student Chapter (MSIT)" },
+  { title: "Google Cloud Generative AI / AI Completion Certificate" },
 ];

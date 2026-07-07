@@ -1,5 +1,53 @@
+"use client";
+
+import { motion } from "framer-motion";
 import Reveal from "./Reveal";
-import { experience } from "@/data/portfolio";
+import { experience, skillBars } from "@/data/portfolio";
+import { getSkillMeta } from "./skillIcons";
+
+function SkillGrowthChart() {
+  return (
+    <div className="rounded-2xl border border-card-border bg-card p-6 sm:p-8">
+      <div className="mb-6 flex items-center justify-between">
+        <h3 className="font-display text-lg font-semibold">Skills I&apos;ve built</h3>
+        <span className="text-xs uppercase tracking-widest text-muted">
+          Growth across roles
+        </span>
+      </div>
+      <div className="space-y-5">
+        {skillBars.map((bar, i) => (
+          <div key={bar.label}>
+            <div className="mb-1.5 flex items-center justify-between text-sm">
+              <span className="text-foreground">{bar.label}</span>
+              <motion.span
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 + i * 0.1 }}
+                className="text-muted"
+              >
+                {bar.level}%
+              </motion.span>
+            </div>
+            <div className="h-2.5 w-full overflow-hidden rounded-full bg-background/70">
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: `${bar.level}%` }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{
+                  duration: 1.1,
+                  delay: i * 0.1,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="h-full rounded-full bg-gradient-to-r from-accent-2 to-accent"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Experience() {
   return (
@@ -11,6 +59,12 @@ export default function Experience() {
         <h2 className="font-display text-3xl font-bold sm:text-4xl">
           Where I&apos;ve been
         </h2>
+      </Reveal>
+
+      <Reveal delay={0.1}>
+        <div className="mt-10">
+          <SkillGrowthChart />
+        </div>
       </Reveal>
 
       <div className="relative mt-14 pl-8">
@@ -48,6 +102,25 @@ export default function Experience() {
                       </li>
                     ))}
                   </ul>
+
+                  <div className="mt-4 flex flex-wrap gap-2 border-t border-card-border pt-4">
+                    {exp.skills.map((skill, si) => {
+                      const { Icon, color } = getSkillMeta(skill);
+                      return (
+                        <motion.span
+                          key={skill}
+                          initial={{ opacity: 0, scale: 0.85 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: si * 0.05 }}
+                          className="inline-flex items-center gap-1.5 rounded-full border border-card-border bg-background/50 px-2.5 py-1 text-[11px] text-muted"
+                        >
+                          <Icon size={13} className="shrink-0" style={{ color }} />
+                          {skill}
+                        </motion.span>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </Reveal>

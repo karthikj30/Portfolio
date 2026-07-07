@@ -1,5 +1,9 @@
+"use client";
+
+import { motion } from "framer-motion";
 import Reveal from "./Reveal";
 import { skillGroups } from "@/data/portfolio";
+import { getSkillMeta } from "./skillIcons";
 
 export default function Skills() {
   return (
@@ -17,19 +21,44 @@ export default function Skills() {
         {skillGroups.map((group, gi) => (
           <Reveal key={group.title} delay={gi * 0.08}>
             <div className="h-full rounded-2xl border border-card-border bg-card p-6">
-              <h3 className="mb-4 font-display text-sm font-semibold text-foreground">
+              <h3 className="mb-5 font-display text-sm font-semibold text-foreground">
                 {group.title}
               </h3>
-              <div className="flex flex-wrap gap-2">
-                {group.items.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full border border-card-border bg-background/40 px-3 py-1 text-xs text-muted transition-colors hover:border-accent-2/50 hover:text-accent-2"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
+              <motion.div
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-60px" }}
+                variants={{
+                  hidden: {},
+                  show: { transition: { staggerChildren: 0.05 } },
+                }}
+                className="flex flex-col gap-2.5"
+              >
+                {group.items.map((item) => {
+                  const { Icon, color } = getSkillMeta(item);
+                  return (
+                    <motion.div
+                      key={item}
+                      variants={{
+                        hidden: { opacity: 0, x: -12 },
+                        show: { opacity: 1, x: 0 },
+                      }}
+                      whileHover={{ x: 4 }}
+                      className="group flex items-center gap-3 rounded-xl border border-transparent px-2 py-1.5 transition-colors hover:border-card-border hover:bg-background/40"
+                    >
+                      <span
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-background/60 transition-transform duration-300 group-hover:scale-110"
+                        style={{ color }}
+                      >
+                        <Icon size={20} />
+                      </span>
+                      <span className="text-sm text-muted transition-colors group-hover:text-foreground">
+                        {item}
+                      </span>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
             </div>
           </Reveal>
         ))}
