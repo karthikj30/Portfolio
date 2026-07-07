@@ -10,8 +10,7 @@ import {
 } from "framer-motion";
 import { ArrowDown, Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "./icons";
-import ParticleField from "./ParticleField";
-import KenBurnsBackdrop from "./KenBurnsBackdrop";
+import GalaxyBackground from "./GalaxyBackground";
 import { profile } from "@/data/portfolio";
 
 export default function Hero() {
@@ -61,9 +60,9 @@ export default function Hero() {
       className="relative flex min-h-screen items-center overflow-hidden pt-24"
     >
       <div className="pointer-events-none absolute inset-0">
-        <KenBurnsBackdrop />
-        <ParticleField />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/30 to-background" />
+        <GalaxyBackground />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_45%_at_50%_100%,rgba(139,92,246,0.12),transparent)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background" />
       </div>
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr]">
