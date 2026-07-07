@@ -1,154 +1,91 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Award } from "lucide-react";
+import { useState } from "react";
+import { Award } from "lucide-react";
 import Reveal from "./Reveal";
-import { certificates } from "@/data/portfolio";
+import { certificates, type Certificate } from "@/data/portfolio";
 
-function chunk<T>(arr: T[], size: number): T[][] {
-  const out: T[][] = [];
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
-  return out;
+function CertCard({ cert }: { cert: Certificate }) {
+  const [err, setErr] = useState(false);
+  const showImage = cert.image && !err;
+
+  const card = (
+    <div className="w-[280px] shrink-0 overflow-hidden rounded-2xl border border-card-border bg-card transition-colors hover:border-accent-2/50 sm:w-[360px]">
+      {showImage ? (
+        <div className="h-44 w-full overflow-hidden bg-background">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={cert.image}
+            alt={cert.title}
+            loading="lazy"
+            draggable={false}
+            onError={() => setErr(true)}
+            className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+          />
+        </div>
+      ) : (
+        <div className="flex h-44 w-full items-center justify-center bg-[radial-gradient(circle_at_50%_30%,rgba(139,92,246,0.18),transparent_70%)]">
+          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent-2/10 text-accent-2">
+            <Award size={28} />
+          </span>
+        </div>
+      )}
+      <div className="border-t border-card-border p-4">
+        <p className="text-sm font-medium leading-snug text-foreground">
+          {cert.title}
+        </p>
+      </div>
+    </div>
+  );
+
+  return cert.image ? (
+    <a href={cert.image} target="_blank" rel="noreferrer" draggable={false}>
+      {card}
+    </a>
+  ) : (
+    card
+  );
+}
+
+function Row({ items, reverse }: { items: Certificate[]; reverse?: boolean }) {
+  // Duplicate the row so the -50% translate loops seamlessly.
+  const doubled = [...items, ...items];
+  return (
+    <div className="group flex w-max gap-5 [animation:marquee-x_38s_linear_infinite] hover:[animation-play-state:paused]"
+      style={reverse ? { animationDirection: "reverse" } : undefined}
+    >
+      {doubled.map((cert, i) => (
+        <CertCard key={`${cert.title}-${i}`} cert={cert} />
+      ))}
+    </div>
+  );
 }
 
 export default function Certifications() {
-  const [perView, setPerView] = useState(2);
-  const [index, setIndex] = useState(0);
-  const pausedRef = useRef(false);
-
-  useEffect(() => {
-    const update = () => {
-      const w = window.innerWidth;
-      setPerView(w < 640 ? 1 : w < 1024 ? 2 : 3);
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  const slides = useMemo(() => chunk(certificates, perView), [perView]);
-
-  useEffect(() => {
-    setIndex((i) => Math.min(i, slides.length - 1));
-  }, [slides.length]);
-
-  useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced || slides.length <= 1) return;
-    const id = setInterval(() => {
-      if (!pausedRef.current) setIndex((i) => (i + 1) % slides.length);
-    }, 3800);
-    return () => clearInterval(id);
-  }, [slides.length]);
-
-  const go = (dir: number) =>
-    setIndex((i) => (i + dir + slides.length) % slides.length);
+  const rowA = certificates.filter((_, i) => i % 2 === 0);
+  const rowB = certificates.filter((_, i) => i % 2 === 1);
 
   return (
-    <section id="certifications" className="relative mx-auto max-w-6xl px-6 py-28">
-      <Reveal>
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-accent-2">
-              Certifications &amp; Awards
-            </p>
-            <h2 className="font-display text-3xl font-bold sm:text-4xl">
-              Learning, formalized
-            </h2>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => go(-1)}
-              aria-label="Previous"
-              className="rounded-full border border-card-border bg-card p-2.5 text-muted transition-colors hover:text-foreground"
-            >
-              <ArrowLeft size={18} />
-            </button>
-            <button
-              onClick={() => go(1)}
-              aria-label="Next"
-              className="rounded-full border border-card-border bg-card p-2.5 text-muted transition-colors hover:text-foreground"
-            >
-              <ArrowRight size={18} />
-            </button>
-          </div>
-        </div>
-      </Reveal>
+    <section id="certifications" className="relative py-28">
+      <div className="mx-auto max-w-6xl px-6">
+        <Reveal>
+          <p className="mb-2 text-center text-sm font-semibold uppercase tracking-widest text-accent-2">
+            Certifications &amp; Awards
+          </p>
+          <h2 className="text-center font-display text-3xl font-bold sm:text-4xl">
+            Trophy Room
+          </h2>
+          <p className="mt-3 text-center text-sm text-muted">
+            Achievements and certifications unlocked — hover to pause, click to
+            enlarge.
+          </p>
+        </Reveal>
+      </div>
 
       <Reveal delay={0.1}>
-        <div
-          className="mt-10"
-          onMouseEnter={() => (pausedRef.current = true)}
-          onMouseLeave={() => (pausedRef.current = false)}
-        >
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
-              style={{ transform: `translateX(-${index * 100}%)` }}
-            >
-              {slides.map((group, si) => (
-                <div
-                  key={si}
-                  className="grid w-full shrink-0 gap-4"
-                  style={{
-                    gridTemplateColumns: `repeat(${perView}, minmax(0, 1fr))`,
-                  }}
-                >
-                  {group.map((cert) => {
-                    const card = (
-                      <div className="group flex h-full min-h-[130px] flex-col justify-between overflow-hidden rounded-2xl border border-card-border bg-card p-6 transition-colors hover:border-accent-2/40">
-                        {cert.image ? (
-                          <div className="mb-4 overflow-hidden rounded-lg border border-card-border">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={cert.image}
-                              alt={cert.title}
-                              className="h-28 w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            />
-                          </div>
-                        ) : (
-                          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-2/10 text-accent-2 transition-transform duration-300 group-hover:scale-110">
-                            <Award size={22} />
-                          </span>
-                        )}
-                        <p className="mt-4 text-sm font-medium leading-snug text-foreground">
-                          {cert.title}
-                        </p>
-                      </div>
-                    );
-                    return cert.image ? (
-                      <a
-                        key={cert.title}
-                        href={cert.image}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {card}
-                      </a>
-                    ) : (
-                      <div key={cert.title}>{card}</div>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* pagination dots */}
-          <div className="mt-8 flex items-center justify-center gap-2">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setIndex(i)}
-                aria-label={`Go to slide ${i + 1}`}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  i === index
-                    ? "w-8 bg-accent-2"
-                    : "w-2 bg-card-border hover:bg-muted"
-                }`}
-              />
-            ))}
-          </div>
+        <div className="mt-12 flex flex-col gap-5 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+          <Row items={rowA} />
+          <Row items={rowB} reverse />
         </div>
       </Reveal>
     </section>

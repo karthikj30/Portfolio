@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Lock, RotateCw } from "lucide-react";
 import Reveal from "./Reveal";
 import { projects } from "@/data/portfolio";
 import { getSkillMeta } from "./skillIcons";
 
-const SPEED = 45; // px per second
+const SPEED = 95; // px per second
 
 export default function ProjectsGallery() {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -18,10 +18,26 @@ export default function ProjectsGallery() {
     moved: false,
     single: 0,
     raf: 0,
+    pointerType: "mouse" as string,
   });
+
+  const [isTouch, setIsTouch] = useState(false);
+  const [flipped, setFlipped] = useState<Set<number>>(new Set());
 
   // Duplicate the list so the strip can loop seamlessly.
   const loop = [...projects, ...projects];
+
+  useEffect(() => {
+    setIsTouch(
+      window.matchMedia("(hover: none), (pointer: coarse)").matches ||
+        navigator.maxTouchPoints > 0
+    );
+  }, []);
+
+  // Pause the marquee whenever a card is flipped open (touch devices).
+  useEffect(() => {
+    state.current.paused = flipped.size > 0;
+  }, [flipped]);
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -79,6 +95,7 @@ export default function ProjectsGallery() {
     s.moved = false;
     s.startX = e.clientX;
     s.startScroll = el.scrollLeft;
+    s.pointerType = e.pointerType || "mouse";
     el.setPointerCapture(e.pointerId);
   }
 
@@ -96,8 +113,37 @@ export default function ProjectsGallery() {
     state.current.dragging = false;
   }
 
-  function onCardClick(e: React.MouseEvent) {
-    if (state.current.moved) e.preventDefault();
+  function toggleFlip(i: number) {
+    setFlipped((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i);
+      else next.add(i);
+      return next;
+    });
+  }
+
+  // On touch: first tap flips the card; a second tap on a flipped card with a
+  // link follows it. On desktop, hover flips and a click follows the link.
+  function onCardClick(e: React.MouseEvent, i: number, hasHref: boolean) {
+    if (state.current.moved) {
+      e.preventDefault();
+      return;
+    }
+    // Detect touch from the actual interaction (robust across devices), not
+    // just a media query — this is the fix for tap-to-flip on phones.
+    const touch =
+      state.current.pointerType === "touch" ||
+      state.current.pointerType === "pen" ||
+      isTouch;
+    if (!touch) return;
+    const isFlipped = flipped.has(i);
+    if (!isFlipped) {
+      e.preventDefault();
+      toggleFlip(i);
+    } else if (!hasHref) {
+      e.preventDefault();
+      toggleFlip(i);
+    }
   }
 
   return (
@@ -111,7 +157,8 @@ export default function ProjectsGallery() {
             Things I&apos;ve built
           </h2>
           <p className="mt-3 text-sm text-muted">
-            Auto-scrolling — hover a card to flip it and reveal the stack.
+            Auto-scrolling — {isTouch ? "tap" : "hover"} a card to flip it and
+            reveal the stack.
           </p>
         </Reveal>
       </div>
@@ -124,20 +171,26 @@ export default function ProjectsGallery() {
         onPointerUp={onPointerUp}
         onPointerLeave={() => {
           onPointerUp();
-          state.current.paused = false;
+          if (flipped.size === 0) state.current.paused = false;
         }}
         onMouseEnter={() => (state.current.paused = true)}
-        onMouseLeave={() => (state.current.paused = false)}
+        onMouseLeave={() => {
+          if (flipped.size === 0) state.current.paused = false;
+        }}
         className="mt-10 flex cursor-grab select-none gap-6 overflow-x-auto px-6 pb-6 active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       >
         {loop.map((project, i) => {
           const stack = project.stack.split(" · ");
+          const isFlipped = flipped.has(i);
           const inner = (
             <div
               className="group h-[420px] w-[280px] shrink-0 [perspective:1400px] sm:w-[320px]"
               draggable={false}
             >
-              <div className="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+              <div
+                className="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]"
+                style={isFlipped ? { transform: "rotateY(180deg)" } : undefined}
+              >
                 {/* Front */}
                 <div className="absolute inset-0 flex flex-col justify-end overflow-hidden rounded-3xl border border-card-border bg-card p-6 [backface-visibility:hidden]">
                   {project.image && (
@@ -147,6 +200,9 @@ export default function ProjectsGallery() {
                         src={project.image}
                         alt={project.name}
                         draggable={false}
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
                         className="absolute inset-0 h-full w-full object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/20" />
@@ -168,7 +224,7 @@ export default function ProjectsGallery() {
                     {project.description}
                   </p>
                   <p className="relative mt-4 inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-accent-2/80">
-                    <RotateCw size={12} /> Hover for stack
+                    <RotateCw size={12} /> {isTouch ? "Tap" : "Hover"} for stack
                   </p>
                 </div>
 
@@ -188,7 +244,15 @@ export default function ProjectsGallery() {
                         <div
                           key={t}
                           className="flex translate-y-2 items-center gap-3 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100"
-                          style={{ transitionDelay: `${250 + ti * 90}ms` }}
+                          style={
+                            isFlipped
+                              ? {
+                                  opacity: 1,
+                                  transform: "translateY(0)",
+                                  transitionDelay: `${250 + ti * 90}ms`,
+                                }
+                              : { transitionDelay: `${250 + ti * 90}ms` }
+                          }
                         >
                           <span
                             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-background/60"
@@ -218,12 +282,17 @@ export default function ProjectsGallery() {
               target="_blank"
               rel="noreferrer"
               draggable={false}
-              onClick={onCardClick}
+              onClick={(e) => onCardClick(e, i, true)}
             >
               {inner}
             </a>
           ) : (
-            <div key={`${project.name}-${i}`}>{inner}</div>
+            <div
+              key={`${project.name}-${i}`}
+              onClick={(e) => onCardClick(e, i, false)}
+            >
+              {inner}
+            </div>
           );
         })}
       </div>

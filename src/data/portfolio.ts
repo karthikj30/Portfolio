@@ -178,8 +178,8 @@ export const projects: Project[] = [
     stack: "Prometheus · Grafana · DCGM Exporter · LiteLLM · Langfuse",
     description:
       "An observability stack for LLM-serving infrastructure — monitors latency, token usage, GPU utilization, and model failures to improve troubleshooting and capacity planning.",
-    image: "/images/projects/my-project.png",
-    href: "https://github.com/karthikj30/NSE_Observability"
+    image: "/images/projects/nse-observability.png",
+    href: "https://github.com/karthikj30/NSE_Observability",
   },
   {
     name: "VendorConnect",
@@ -200,13 +200,13 @@ export const projects: Project[] = [
     href: "https://github.com/karthikj30/Skillora",
   },
   {
-    name: "CodeMinds",
-    date: "Jul 2025 – Aug 2025",
-    stack: "Python · OpenCV",
+    name: "EV-Bharat",
+    date: "2026",
+    stack: "Python · FastAPI · TypeScript · YOLO · RAG",
     description:
-      "Built during a Google hackathon — fire detection, crowd monitoring, and automated alert generation.",
-    image: "/images/projects/codeminds.png",
-    href: "https://github.com/karthikj30/CodeMinds",
+      "An AI-integrated EV ecosystem bridging vehicle hardware (ESP32/BMS) with predictive intelligence — battery SOC/SOH/RUL forecasting, computer-vision driver-drowsiness detection, and a RAG advisory bot.",
+    image: "/images/projects/evbharat.png",
+    href: "https://github.com/karthikj30/EV-Bharat",
   },
   {
     name: "Itihaas",
@@ -267,6 +267,22 @@ export const githubProjects: GithubProject[] = [
     stack: "React · Node/Express · D3",
     href: "https://github.com/karthikj30/DebtEase",
     image: "/images/projects/debtease.png",
+  },
+  {
+    name: "HealthSaathi",
+    description:
+      "A patient pre-consultation assistant — guided symptom intake, urgency detection, and doctor-ready reports for better continuity of care.",
+    stack: "Node · Express · PostgreSQL",
+    href: "https://github.com/karthikj30/HealthSaathi",
+    image: "/images/projects/healthsaathi.png",
+  },
+  {
+    name: "Arka Jewels",
+    description:
+      "A modern, fully responsive jewellery e-commerce web app with a catalogue, cart, and product pages.",
+    stack: "React 18 · React Router",
+    href: "https://github.com/karthikj30/Arka-Jewels",
+    image: "/images/projects/arka-jewels.png",
   },
   {
     name: "GForce",

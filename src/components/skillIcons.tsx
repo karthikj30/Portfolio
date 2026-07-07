@@ -128,6 +128,11 @@ const MAP: Record<string, SkillMeta> = {
   "rapid prototyping": { Icon: TbBulb, color: "#F2C811" },
   "ui/ux": { Icon: TbSparkles, color: VIOLET },
   "full-stack": { Icon: TbCode, color: ACCENT },
+
+  fastapi: { Icon: TbApi, color: "#009688" },
+  rag: { Icon: TbBrain, color: VIOLET },
+  yolo: { Icon: TbEye, color: ACCENT },
+  "computer vision": { Icon: TbEye, color: ACCENT },
 };
 
 const FALLBACK: SkillMeta = { Icon: TbSparkles, color: ACCENT };

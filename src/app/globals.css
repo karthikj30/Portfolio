@@ -66,3 +66,12 @@ body {
   background-clip: text;
   color: transparent;
 }
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
