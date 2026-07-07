@@ -178,6 +178,8 @@ export const projects: Project[] = [
     stack: "Prometheus · Grafana · DCGM Exporter · LiteLLM · Langfuse",
     description:
       "An observability stack for LLM-serving infrastructure — monitors latency, token usage, GPU utilization, and model failures to improve troubleshooting and capacity planning.",
+    image: "/images/projects/my-project.png",
+    href: "https://github.com/karthikj30/NSE_Observability"
   },
   {
     name: "VendorConnect",
@@ -185,6 +187,8 @@ export const projects: Project[] = [
     stack: "Python · OpenAI · Android",
     description:
       "A digital platform solving raw-material sourcing for street food vendors across India — connects vendors with verified suppliers, group ordering for bulk discounts, and real-time price alerts.",
+    image: "/images/projects/vendorconnect.png",
+    href: "https://github.com/karthikj30/VendorConnect"
   },
   {
     name: "Skillora",
@@ -192,6 +196,7 @@ export const projects: Project[] = [
     stack: "Python · Django · MongoDB",
     description:
       "A centralized learning platform connecting skill development with job opportunities through courses, job matching, and instructor-led learning.",
+    image: "/images/projects/skillora.png",
     href: "https://github.com/karthikj30/Skillora",
   },
   {
@@ -200,6 +205,8 @@ export const projects: Project[] = [
     stack: "Python · OpenCV",
     description:
       "Built during a Google hackathon — fire detection, crowd monitoring, and automated alert generation.",
+    image: "/images/projects/codeminds.png",
+    href: "https://github.com/karthikj30/CodeMinds",
   },
   {
     name: "Itihaas",
@@ -207,6 +214,8 @@ export const projects: Project[] = [
     stack: "Python · Flask · HTML · CSS · SQLite",
     description:
       "A heritage-tourism platform connecting travelers with India's monuments and historical sites — guided tours, interactive maps, rewards, and curated merchandise. Won first prize at Colloquium'25.",
+    image: "/images/projects/itihaas.png",
+    href: "https://github.com/karthikj30/Itihaas",
   },
 ];
 
@@ -215,6 +224,7 @@ export type GithubProject = {
   description: string;
   stack: string;
   href: string;
+  image?: string;
 };
 
 export const githubProjects: GithubProject[] = [
@@ -224,6 +234,7 @@ export const githubProjects: GithubProject[] = [
       "A digital heritage platform for Sikkim's 200+ monasteries — 360° virtual tours, interactive maps, and a reward system for spiritual tourism.",
     stack: "React · Maps · 360° Media",
     href: "https://github.com/karthikj30/Monastery360",
+    image: "/images/projects/monastery360.png",
   },
   {
     name: "Karigar",
@@ -231,6 +242,7 @@ export const githubProjects: GithubProject[] = [
       "An AI-powered marketplace assistant empowering Indian artisans to tell their story and reach global buyers, with local-language voice narration and artisan mapping.",
     stack: "Vertex AI · GenAI · Maps",
     href: "https://github.com/karthikj30/Karigar",
+    image: "/images/projects/karigar.png",
   },
   {
     name: "EcoSaksham",
@@ -238,6 +250,7 @@ export const githubProjects: GithubProject[] = [
       "A role-based waste-management platform connecting residents, BMC workers, and NGOs for cleaner, smarter cities — with a companion Android app.",
     stack: "Flask · SQLite · Bootstrap · Android",
     href: "https://github.com/karthikj30/EcoSaksham",
+    image: "/images/projects/ecosaksham.png",
   },
   {
     name: "BharatYatra",
@@ -245,6 +258,7 @@ export const githubProjects: GithubProject[] = [
       "A culturally-inspired travel planner for exploring, planning, and booking journeys across India's destinations.",
     stack: "React · React Router",
     href: "https://github.com/karthikj30/BharatYatra",
+    image: "/images/projects/bharatyatra.png",
   },
   {
     name: "DebtEase",
@@ -252,12 +266,14 @@ export const githubProjects: GithubProject[] = [
       "An explainable debt-settlement and expense-sharing assistant — a greedy settlement algorithm paired with an interactive dashboard.",
     stack: "React · Node/Express · D3",
     href: "https://github.com/karthikj30/DebtEase",
+    image: "/images/projects/debtease.png",
   },
   {
     name: "GForce",
     description: "Built for the Bharatiya Antariksh Hackathon (ISRO).",
     stack: "Python",
     href: "https://github.com/karthikj30/GForce",
+    image: "/images/projects/gforce.png",
   },
 ];
 
@@ -268,17 +284,17 @@ export type Certificate = {
 };
 
 export const certificates: Certificate[] = [
-  { title: "Internship Completion Certificate — GET AnalyticX" },
-  { title: "Gen AI Program — Gen AI Academy (Forge)" },
-  { title: "Virtual Internship — Generative AI — SmartBridge" },
-  { title: "Introduction to Technology Apprenticeship — Accenture (Forage)" },
-  { title: "Cybersecurity Analyst — Job Simulation — Accenture (Forage)" },
-  { title: "ISRO Course — Government of India" },
-  { title: "Introduction to Generative AI — IBM SkillsBuild" },
-  { title: "Certificate of Appreciation — NXT WAVE / OpenAI Academy" },
-  { title: "Certificate of Acknowledgement — Bharatiya Antariksh Hackathon" },
-  { title: "Google Developer Groups on Campus" },
-  { title: "NoSQL & MongoDB Bootcamp — DevTown" },
-  { title: "Microsoft Student Chapter (MSIT)" },
-  { title: "Google Cloud Generative AI / AI Completion Certificate" },
+  { title: "Internship Completion Certificate — GET AnalyticX", image: "/images/certificates/get.png" },
+  { title: "Gen AI Program — Gen AI Academy (Forge)", image: "/images/certificates/genai.jpg" },
+  { title: "Virtual Internship — Generative AI — SmartBridge", image: "/images/certificates/google.png" },
+  { title: "Introduction to Technology Apprenticeship — Accenture (Forage)", image: "/images/certificates/accenture.png" },
+  { title: "Cybersecurity Analyst — Job Simulation — TATA (Forage)", image: "/images/certificates/tata.png" },
+  { title: "ISRO Course — Government of India", image: "/images/certificates/isro.png" },
+  { title: "Introduction to Generative AI — IBM SkillsBuild", image: "/images/certificates/ibm.png" },
+  { title: "Certificate of Appreciation — NXT WAVE / OpenAI Academy", image: "/images/certificates/openai.png" },
+  { title: "Certificate of Acknowledgement — Bharatiya Antariksh Hackathon", image: "/images/certificates/bahHack2skill-Certificate.png" },
+  { title: "Google Developer Groups on Campus", image: "/images/certificates/gdgvit.png" },
+  { title: "NoSQL & MongoDB Bootcamp — DevTown", image: "/images/certificates/microsoft.png" },
+  { title: "Microsoft Student Chapter (MSIT)", image: "/images/certificates/google.png" },
+  { title: "Google Cloud Generative AI / AI Completion Certificate", image: "/images/certificates/genai.jpg" },
 ];
