@@ -17,12 +17,114 @@ export const profile = {
   resumeUrl: "/resume.pdf",
   githubUser: "karthikj30",
   leetcodeUser: "karthikjanardhan5",
+  // TryHackMe's API is bot-protected, so stats can't be fetched automatically.
+  // Paste your badge's userPublicId here (TryHackMe → Profile → "Get your badge"
+  // → copy the id from the iframe src) to show the live badge; leave "" for a link.
+  tryhackmeBadgeId: "https://assets.tryhackme.com/room-badges/04899cfb2ec510cb3f04f1d4f38899ea.png",
   socials: {
     github: "https://github.com/karthikj30",
     linkedin: "https://www.linkedin.com/in/karthik-janardhan-73a8b12a8/",
     leetcode: "https://leetcode.com/u/karthikjanardhan5/",
+    tryhackme: "https://tryhackme.com/p/karthikjanardhan5",
+    medium: "https://medium.com/@karthikjanardhan5",
+    linkedinActivity:
+      "https://www.linkedin.com/in/karthik-janardhan-73a8b12a8/recent-activity/all/",
   },
 };
+
+export type FeedPost = {
+  title: string;
+  url: string;
+  date?: string;
+  excerpt?: string;
+};
+
+// Real LinkedIn posts shown via LinkedIn's official embed. The /embed/ endpoint
+// is embeddable even though the profile page is auth-walled. Clicking opens the
+// post on LinkedIn. To add one: copy a post URL and take the id after
+// `-ugcPost-` or `-activity-` → urn:li:ugcPost:<id> / urn:li:activity:<id>.
+export type LinkedInEmbed = { urn: string; url: string; title: string };
+
+export const linkedinEmbeds: LinkedInEmbed[] = [
+  {
+    urn: "urn:li:ugcPost:7472881728320172032",
+    url: "https://www.linkedin.com/posts/anushka-kotal-ab20a22b7_debtease-blitz-ieee-ugcPost-7472881728320172032-MZrW",
+    title: "DebtEase — 1st Prize, B.L.I.T.Z. FinTech",
+  },
+  {
+    urn: "urn:li:ugcPost:7454104009012998144",
+    url: "https://www.linkedin.com/posts/anushka-kotal-ab20a22b7_evbharat-smartmobility-hardwareproject-ugcPost-7454104009012998144-7oMf",
+    title: "EV Bharat — 4th place, Colloquium 2026 (Hardware)",
+  },
+  {
+    urn: "urn:li:ugcPost:7443884764832518145",
+    url: "https://www.linkedin.com/posts/riya-vishwakarma-2540a52b7_openaiacademy-nxtwave-buildathon-ugcPost-7443884764832518145-sVxM",
+    title: "OpenAI Academy × NxtWave Buildathon",
+  },
+  {
+    urn: "urn:li:activity:7421549652472283136",
+    url: "https://www.linkedin.com/posts/karthik-janardhan-73a8b12a8_genalexchange-genalacademy-googlecloud-activity-7421549652472283136-OJ19",
+    title: "GenAI Academy — Top 50 of 250,000+",
+  },
+  {
+    urn: "urn:li:activity:7376339597091438593",
+    url: "https://www.linkedin.com/posts/karthik-janardhan-73a8b12a8_colloquium25-hackathon-itforgoodgovernance-activity-7376339597091438593-T4JC",
+    title: "Itihaas — A Monumental Journey",
+  },
+];
+
+export type ThmRoom = {
+  name: string;
+  description: string;
+  difficulty: string;
+  type: string;
+};
+
+// TryHackMe's API is bot-protected, so completed rooms can't be fetched live.
+// Add rooms here as you complete them (they show in the TryHackMe stats card).
+export const tryhackmeRooms: ThmRoom[] = [
+  {
+    name: "Passive Reconnaissance",
+    description:
+      "Essential tools for passive reconnaissance — whois, nslookup, and dig.",
+    difficulty: "Easy",
+    type: "Walkthrough",
+  },
+  {
+    name: "Active Reconnaissance",
+    description:
+      "Simple tools like traceroute, ping, telnet, and a web browser to gather information.",
+    difficulty: "Easy",
+    type: "Walkthrough",
+  },
+  {
+    name: "Metasploit: Introduction",
+    description:
+      "An introduction to the main components of the Metasploit Framework.",
+    difficulty: "Easy",
+    type: "Walkthrough",
+  },
+  {
+    name: "Vulnerabilities 101",
+    description:
+      "Understand application flaws and apply research skills on vulnerability databases.",
+    difficulty: "Easy",
+    type: "Walkthrough",
+  },
+  {
+    name: "Web Application Security",
+    description:
+      "Explore web applications and some of their common security issues.",
+    difficulty: "Easy",
+    type: "Walkthrough",
+  },
+  {
+    name: "Soupedecode 01",
+    description: "Test your enumeration skills on this boot-to-root machine.",
+    difficulty: "Easy",
+    type: "Challenge",
+  },
+];
 
 export const about = {
   paragraphs: [
@@ -245,6 +347,10 @@ export type GithubProject = {
   stack: string;
   href: string;
   image?: string;
+  /** Longer description shown in the dialog (optional; falls back to description). */
+  about?: string;
+  /** Live deployment link (optional). */
+  demo?: string;
 };
 
 export const githubProjects: GithubProject[] = [
@@ -262,6 +368,7 @@ export const githubProjects: GithubProject[] = [
       "An AI-powered marketplace assistant empowering Indian artisans to tell their story and reach global buyers, with local-language voice narration and artisan mapping.",
     stack: "Vertex AI · GenAI · Maps",
     href: "https://github.com/karthikj30/Karigar",
+    demo: "https://karigar-7ngk.onrender.com",
     image: "/images/projects/karigar.png",
   },
   {
@@ -270,6 +377,7 @@ export const githubProjects: GithubProject[] = [
       "A role-based waste-management platform connecting residents, BMC workers, and NGOs for cleaner, smarter cities — with a companion Android app.",
     stack: "Flask · SQLite · Bootstrap · Android",
     href: "https://github.com/karthikj30/EcoSaksham",
+    demo: "https://ecosaksham.onrender.com/",
     image: "/images/projects/ecosaksham.png",
   },
   {
@@ -286,6 +394,7 @@ export const githubProjects: GithubProject[] = [
       "An explainable debt-settlement and expense-sharing assistant — a greedy settlement algorithm paired with an interactive dashboard.",
     stack: "React · Node/Express · D3",
     href: "https://github.com/karthikj30/DebtEase",
+    demo: "https://debt-ease-two.vercel.app",
     image: "/images/projects/debtease.png",
   },
   {
@@ -294,6 +403,7 @@ export const githubProjects: GithubProject[] = [
       "A patient pre-consultation assistant — guided symptom intake, urgency detection, and doctor-ready reports for better continuity of care.",
     stack: "Node · Express · PostgreSQL",
     href: "https://github.com/karthikj30/HealthSaathi",
+    demo: "https://healthsaathi-fawn.vercel.app",
     image: "/images/projects/healthsaathi.png",
   },
   {
@@ -302,6 +412,7 @@ export const githubProjects: GithubProject[] = [
       "A modern, fully responsive jewellery e-commerce web app with a catalogue, cart, and product pages.",
     stack: "React 18 · React Router",
     href: "https://github.com/karthikj30/Arka-Jewels",
+    demo: "https://arka-jewels.onrender.com",
     image: "/images/projects/arka-jewels.png",
   },
   {

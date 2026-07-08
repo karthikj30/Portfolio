@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { GithubIcon } from "./icons";
 import GitHubStats from "./GitHubStats";
+import TryHackMeRooms from "./TryHackMeRooms";
 import { profile } from "@/data/portfolio";
 
 const LEETCODE = `https://leetcard.jacoblin.cool/${profile.leetcodeUser}?theme=dark&font=Nunito&border=0&radius=12`;
@@ -42,12 +43,13 @@ export default function DevStats() {
         <GithubIcon size={18} />
         <h3 className="font-display text-lg font-semibold">By the numbers</h3>
         <span className="ml-1 text-xs uppercase tracking-widest text-muted">
-          Live GitHub &amp; LeetCode
+          Live GitHub, LeetCode &amp; TryHackMe
         </span>
       </div>
       <div className="grid items-start gap-4 md:grid-cols-2">
         <GitHubStats />
         <LeetCodeCard />
+        <TryHackMeRooms />
       </div>
     </div>
   );

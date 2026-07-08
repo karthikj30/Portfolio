@@ -5,12 +5,24 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ExternalLink, X } from "lucide-react";
 import { GithubIcon } from "./icons";
 import { getSkillMeta } from "./skillIcons";
-import type { Project } from "@/data/portfolio";
+
+/** A shape both `Project` and `GithubProject` satisfy. */
+export type ProjectDetail = {
+  name: string;
+  date?: string;
+  stack: string;
+  description: string;
+  href?: string;
+  image?: string;
+  images?: string[];
+  about?: string;
+  demo?: string;
+};
 
 const EVENT = "open-project";
 
 /** Call from any component to open the project detail dialog. */
-export function openProject(project: Project) {
+export function openProject(project: ProjectDetail) {
   window.dispatchEvent(new CustomEvent(EVENT, { detail: project }));
 }
 
@@ -29,11 +41,11 @@ function BrokenImage({ src, alt }: { src: string; alt: string }) {
 }
 
 export default function ProjectModal() {
-  const [project, setProject] = useState<Project | null>(null);
+  const [project, setProject] = useState<ProjectDetail | null>(null);
 
   useEffect(() => {
     const handler = (e: Event) =>
-      setProject((e as CustomEvent<Project>).detail);
+      setProject((e as CustomEvent<ProjectDetail>).detail);
     window.addEventListener(EVENT, handler);
     return () => window.removeEventListener(EVENT, handler);
   }, []);
@@ -80,7 +92,9 @@ export default function ProjectModal() {
             <div className="sticky top-0 z-10 flex items-center justify-between gap-3 rounded-t-2xl border-b border-card-border bg-background/90 px-6 py-4 backdrop-blur-md">
               <div>
                 <h3 className="font-display text-xl font-bold">{project.name}</h3>
-                <p className="text-xs text-muted">{project.date}</p>
+                {project.date && (
+                  <p className="text-xs text-muted">{project.date}</p>
+                )}
               </div>
               <button
                 onClick={() => setProject(null)}

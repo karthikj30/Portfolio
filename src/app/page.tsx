@@ -9,6 +9,7 @@ import Experience from "@/components/Experience";
 import ProjectsGallery from "@/components/ProjectsGallery";
 import MoreProjects from "@/components/MoreProjects";
 import Certifications from "@/components/Certifications";
+import WritingSection from "@/components/WritingSection";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -25,6 +26,7 @@ export default function Home() {
         <ProjectsGallery />
         <MoreProjects />
         <Certifications />
+        <WritingSection />
         <Contact />
       </main>
       <Footer />
