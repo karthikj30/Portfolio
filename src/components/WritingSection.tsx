@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { SiMedium } from "react-icons/si";
 import Reveal from "./Reveal";
 import FeedRotator from "./FeedRotator";
-import LinkedInEmbeds from "./LinkedInEmbeds";
+import LinkedInFeed from "./LinkedInFeed";
 import { profile, type FeedPost } from "@/data/portfolio";
 
 export default function WritingSection() {
@@ -38,7 +38,7 @@ export default function WritingSection() {
 
       <Reveal delay={0.1}>
         <div className="mt-10 grid items-stretch gap-5 md:grid-cols-2">
-          <LinkedInEmbeds />
+          <LinkedInFeed />
           <FeedRotator
             title="Medium"
             icon={<SiMedium size={18} />}

@@ -39,37 +39,69 @@ export type FeedPost = {
   excerpt?: string;
 };
 
-// Real LinkedIn posts shown via LinkedIn's official embed. The /embed/ endpoint
-// is embeddable even though the profile page is auth-walled. Clicking opens the
-// post on LinkedIn. To add one: copy a post URL and take the id after
-// `-ugcPost-` or `-activity-` → urn:li:ugcPost:<id> / urn:li:activity:<id>.
-export type LinkedInEmbed = { urn: string; url: string; title: string };
+// Real LinkedIn posts rendered as native cards (LinkedIn embeds show blank when
+// the viewer blocks third-party cookies, so we don't use the iframe). Clicking a
+// card opens the post on LinkedIn. Details are transcribed from the posts.
+export type LinkedInPost = {
+  author: string;
+  role: string;
+  text: string;
+  reactions: number;
+  comments: number;
+  date: string;
+  url: string;
+  /** true if Karthik reposted someone else's post */
+  reposted?: boolean;
+};
 
-export const linkedinEmbeds: LinkedInEmbed[] = [
+export const linkedinPosts: LinkedInPost[] = [
   {
-    urn: "urn:li:ugcPost:7472881728320172032",
+    author: "Anushka Kotal",
+    role: "Final-Year IT Engineering Student @ SFIT",
+    text: "🏆 Proud to share that our team secured 1st Prize in the FinTech Category at the B.L.I.T.Z. Coding Competition (project DebtEase), organized by the IEEE SFIT Student Branch and IEEE WIE SFIT at St. Francis Institute of Technology. ✨",
+    reactions: 118,
+    comments: 20,
+    date: "3w",
     url: "https://www.linkedin.com/posts/anushka-kotal-ab20a22b7_debtease-blitz-ieee-ugcPost-7472881728320172032-MZrW",
-    title: "DebtEase — 1st Prize, B.L.I.T.Z. FinTech",
+    reposted: true,
   },
   {
-    urn: "urn:li:ugcPost:7454104009012998144",
+    author: "Anushka Kotal",
+    role: "Final-Year IT Engineering Student @ SFIT",
+    text: "Thrilled to share that our team EV Bharat secured 4th place in the Hardware Category at Colloquium 2026, organized by the Department of Information Technology at SFIT and St. Francis Institute of Technology.",
+    reactions: 113,
+    comments: 19,
+    date: "2mo",
     url: "https://www.linkedin.com/posts/anushka-kotal-ab20a22b7_evbharat-smartmobility-hardwareproject-ugcPost-7454104009012998144-7oMf",
-    title: "EV Bharat — 4th place, Colloquium 2026 (Hardware)",
+    reposted: true,
   },
   {
-    urn: "urn:li:ugcPost:7443884764832518145",
+    author: "Riya Vishwakarma",
+    role: "Aspiring AI Engineer | FinTech Track Winner @ B.L.I.T.Z 2026",
+    text: "🚀 What an incredible journey at the OpenAI Academy x NxtWave Buildathon! Our project qualified for the State-Level Buildathon — the stage only gets bigger from here.",
+    reactions: 53,
+    comments: 3,
+    date: "3mo",
     url: "https://www.linkedin.com/posts/riya-vishwakarma-2540a52b7_openaiacademy-nxtwave-buildathon-ugcPost-7443884764832518145-sVxM",
-    title: "OpenAI Academy × NxtWave Buildathon",
+    reposted: true,
   },
   {
-    urn: "urn:li:activity:7421549652472283136",
+    author: "Karthik Janardhan",
+    role: "Third-Year IT Engineering Student @ SFIT",
+    text: "✨ I'm thrilled to share another milestone from my journey with the GenAI Academy by Google Cloud, powered by Hack2skill 🎉. Out of 250,000+ participants, I was honored to be recognized among the Top 50 Learners of June!",
+    reactions: 128,
+    comments: 18,
+    date: "5mo",
     url: "https://www.linkedin.com/posts/karthik-janardhan-73a8b12a8_genalexchange-genalacademy-googlecloud-activity-7421549652472283136-OJ19",
-    title: "GenAI Academy — Top 50 of 250,000+",
   },
   {
-    urn: "urn:li:activity:7376339597091438593",
+    author: "Karthik Janardhan",
+    role: "Third-Year IT Engineering Student @ SFIT",
+    text: "✨ Proud Moment ✨ Thrilled to share that our project Itihaas: A Monumental Journey — a heritage platform exploring the epic tales and historic monuments that define India — won recognition at Colloquium'25.",
+    reactions: 76,
+    comments: 5,
+    date: "9mo",
     url: "https://www.linkedin.com/posts/karthik-janardhan-73a8b12a8_colloquium25-hackathon-itforgoodgovernance-activity-7376339597091438593-T4JC",
-    title: "Itihaas — A Monumental Journey",
   },
 ];
 
